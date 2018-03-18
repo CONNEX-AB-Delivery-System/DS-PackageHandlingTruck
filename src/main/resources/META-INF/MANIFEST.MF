@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Implementation-Title: EV3Dev-lang-java // PackageHandlingTruck project
+Implementation-Version: 0.0.1
+Implementation-Vendor: Juan Antonio Breña Moral
+Main-Class: base.PackageHandlingTruck
+
+
