@@ -8,6 +8,9 @@ import lejos.utility.Delay;
 public class PackageHandlingTruck {
 
     public static void main(final String[] args){
+		
+		//implement this:
+		//https://github.com/ev3dev-lang-java/examples/blob/master/ev3dev-lang-java/src/main/java/lejos/navigation/pathfinding/pathfind.java
 
         System.out.println("Creating Motor A & B");
         final EV3LargeRegulatedMotor motorLeft = new EV3LargeRegulatedMotor(MotorPort.A);
