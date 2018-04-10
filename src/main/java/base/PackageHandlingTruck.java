@@ -87,13 +87,19 @@ public class PackageHandlingTruck{
                 motorLeft.backward();
                 motorRight.backward();
             }
-            else if (42 <= (int)sample[0] && (int)sample[0] < 62){
+            else if (42 <= (int)sample[0] && (int)sample[0] < 52){
                 motorLeft.setSpeed(0);
                 motorRight.setSpeed(200);
                 motorLeft.backward();
                 motorRight.backward();
             }
-            else if (52 <= (int)sample[0]){
+            else if (42 <= (int)sample[0] && (int)sample[0] < 73){
+                motorLeft.setSpeed(0);
+                motorRight.setSpeed(150);
+                motorLeft.backward();
+                motorRight.backward();
+            }
+            else if (73 <= (int)sample[0]){
                 motorLeft.stop(true);
                 motorRight.stop(true);
                 stopFlag = true;
