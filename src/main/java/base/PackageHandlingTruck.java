@@ -53,7 +53,7 @@ public class PackageHandlingTruck{
             lineSample.fetchSample(sample, 0);
             if ((int)sample[0] <= 18){
                 motorLeft.setSpeed(200);
-                motorRight.setSpeed(10);
+                motorRight.setSpeed(0);
                 motorLeft.backward();
                 motorRight.backward();
             }
@@ -87,8 +87,8 @@ public class PackageHandlingTruck{
                 motorLeft.backward();
                 motorRight.backward();
             }
-            else if (42 <= (int)sample[0] && (int)sample[0] < 52){
-                motorLeft.setSpeed(10);
+            else if (42 <= (int)sample[0] && (int)sample[0] < 62){
+                motorLeft.setSpeed(0);
                 motorRight.setSpeed(200);
                 motorLeft.backward();
                 motorRight.backward();
@@ -99,7 +99,7 @@ public class PackageHandlingTruck{
                 stopFlag = true;
             }
             System.out.println("Sample[0]=" +  (int)sample[0]);
-            Delay.msDelay(10);
+            Delay.msDelay(5);
         }
 
 
