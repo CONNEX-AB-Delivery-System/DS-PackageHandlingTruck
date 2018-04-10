@@ -43,7 +43,7 @@ public class PackageHandlingTruck{
 
         try
         {
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         }
         catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
@@ -52,12 +52,14 @@ public class PackageHandlingTruck{
         while (!stopFlag) {
             lineSample.fetchSample(sample, 0);
             if ((int)sample[0] <= 18){
+                System.out.println("WARNING 1: Sample[0]=" +  (int)sample[0]);
                 motorLeft.setSpeed(200);
                 motorRight.setSpeed(0);
                 motorLeft.backward();
                 motorRight.backward();
             }
-            else if (18 < (int)sample[0] && (int)sample[0] <= 25){
+            else if ((18 < (int)sample[0]) && ((int)sample[0] <= 25)){
+                System.out.println("Sample[0]=" +  (int)sample[0]);
                 motorLeft.setSpeed(200);
                 motorRight.setSpeed(60);
                 motorLeft.backward();
@@ -70,8 +72,9 @@ public class PackageHandlingTruck{
                 motorRight.backward();
             }
             else if (29 < (int)sample[0] && (int)sample[0] < 31){
-                motorLeft.setSpeed(200);
-                motorRight.setSpeed(200);
+                System.out.println("WARNING 3: To the infinity and beyond   =" +  (int)sample[0]);
+                motorLeft.setSpeed(300);
+                motorRight.setSpeed(300);
                 motorLeft.backward();
                 motorRight.backward();
             }
@@ -93,18 +96,20 @@ public class PackageHandlingTruck{
                 motorLeft.backward();
                 motorRight.backward();
             }
-            else if (42 <= (int)sample[0] && (int)sample[0] < 73){
+            else if (42 <= (int)sample[0] && (int)sample[0] < 74){
+                System.out.println("Sample[0]=" +  (int)sample[0]);
                 motorLeft.setSpeed(0);
                 motorRight.setSpeed(150);
                 motorLeft.backward();
                 motorRight.backward();
             }
-            else if (73 <= (int)sample[0]){
+            else if (74 <= (int)sample[0]){
+                System.out.println("WARNING 2: Sample[0]=" +  (int)sample[0]);
                 motorLeft.stop(true);
                 motorRight.stop(true);
                 stopFlag = true;
             }
-            System.out.println("Sample[0]=" +  (int)sample[0]);
+
             Delay.msDelay(5);
         }
 
