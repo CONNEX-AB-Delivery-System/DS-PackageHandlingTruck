@@ -1,9 +1,5 @@
 package base;
 
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3ColorSensor;
