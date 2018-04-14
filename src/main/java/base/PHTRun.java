@@ -1,5 +1,6 @@
 package base;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import lejos.robotics.SampleProvider;
 import ev3dev.sensors.BaseSensor;
 import lejos.hardware.port.Port;
@@ -38,7 +39,7 @@ class PHTRun extends Thread {
                 boolean stopFlag = false;
                 Thread.sleep(3000);
 
-                while (!stopFlag) {
+                while (!stopFlag && PackageHandlingTruck.isRunning) {
 
                     SampleProvider colorSample = PackageHandlingTruck.lineReader.getRGBMode();
                     int sampleSizeColor = colorSample.sampleSize();
@@ -74,7 +75,7 @@ class PHTRun extends Thread {
                 boolean obstacleFlag = false;
                 Thread.sleep(3000);
 
-                while (!obstacleFlag) {
+                while (!obstacleFlag && PackageHandlingTruck.isRunning) {
 
                     SampleProvider obstacleSample = PackageHandlingTruck.obstacleDetection.getRGBMode();
                     int obstacleSampleSize = obstacleSample.sampleSize();
@@ -122,7 +123,7 @@ class PHTRun extends Thread {
                 boolean turnFlag = false;
                 Thread.sleep(3000);
 
-                while (!turnFlag){
+                while (!turnFlag && PackageHandlingTruck.isRunning){
 
                     SampleProvider turnSample = PackageHandlingTruck.lineReader.getRGBMode();
                     int turnSampleSizeColor = turnSample.sampleSize();
@@ -157,7 +158,7 @@ class PHTRun extends Thread {
                 boolean deliveryStopFlag = false;
                 Thread.sleep(3000);
 
-                while (!deliveryStopFlag) {
+                while (!deliveryStopFlag && PackageHandlingTruck.isRunning) {
 
                     SampleProvider deliveryColorSample = PackageHandlingTruck.lineReader.getRGBMode();
                     int deliverySampleSizeColor = deliveryColorSample.sampleSize();
@@ -199,6 +200,10 @@ class PHTRun extends Thread {
                 Thread.sleep(3000);
                 PackageHandlingTruck.motorLeft.stop(true);
                 PackageHandlingTruck.motorRight.stop(true);
+
+                PackageHandlingTruck.runThreadIsExecuted = true;
+                PackageHandlingTruck.outputCommandSCS = "FINISHED";
+                System.out.println("Task Executed");
 
             }
 
