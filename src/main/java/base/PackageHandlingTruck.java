@@ -1,5 +1,6 @@
 package base;
 
+import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3ColorSensor;
@@ -50,7 +51,8 @@ public class PackageHandlingTruck {
 
     public static void main(final String[] args){
         //        // getting reference to Main thread
-        Thread t = Thread.currentThread();
+        //Thread t = Thread.currentThread();
+        PHTRun runThread;
 
         double minVoltage = 7.200;
 
@@ -75,38 +77,66 @@ public class PackageHandlingTruck {
 
         //open thread for socket server to listen/send commands to SCS
         PHTThreadPooledServer server = new PHTThreadPooledServer("ServerThread-1", 8000);
-        new Thread(server).start();
+        server.start();
 
         while (isRunning) {
+            //first, check if have received "kill" command from SCS
+            if (inputCommandSCS.equals("KILL")) {
+                //then stop everything
+                //isRunning = false;
+            }
 
-            //check if have recieved command from SCS and have not executed run thread before
-            if (inputCommandSCS.equals("RUN") && (runThreadIsStarted == false)) {
-                //open thread for executing task
-                //TODO: start only after SCS has send command
-                PHTRun runThread = new PHTRun( "RunThread-1");
-                //runThread.setDaemon(false);
+            //check if have received "run" command from SCS and have not executed run thread before
+            if (inputCommandSCS.equals("RUN") && (!runThreadIsStarted)) {
+                //open thread for executing "run" task
+                runThread = new PHTRun( "RunThread-1");
+                //add "run" task and "run executed" flags
+                runThreadIsExecuted = false;
                 runThreadIsStarted = true;
                 runThread.start();
             }
 
-            //wait till run thread is executed
-            if (runThreadIsExecuted == false) {
-                //TODO: not sure about this
+            //wait for some time till run thread is executed
+            if (!runThreadIsExecuted) {
                 try {
-                    //stop if no connection from SCS after 30 seconds
-                    Thread.sleep(1 * 1000);
-                    //DeliveryTruck.isRunning = false;
+                    Thread.sleep(10 * 100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+            } else {
+                inputCommandSCS = "";
+                runThreadIsStarted = false;
             }
+
+            if (PackageHandlingTruck.outputCommandSCS.equals("FINISHED")) {
+
+                System.out.println("main-FINISHED");
+                server.isRunning();
+
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
 
         System.out.println("Stopping Server");
-        server.stop();
+        server.stopServerSocket();
 
         System.exit(0);
 
 
+        //TODO:To Stop the motor in case of pkill java for example
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                System.out.println("Emergency Stop");
+                PackageHandlingTruck.leftMotor.stop();
+                PackageHandlingTruck.rightMotor.stop();
+                PackageHandlingTruck.liftMotor.stop();
+            }
+        }));
     }
 }

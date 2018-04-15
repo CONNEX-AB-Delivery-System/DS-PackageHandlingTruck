@@ -1,5 +1,7 @@
 package base;
 
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
@@ -7,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- *  Title: DTThreadPooledServer
+ *  Title: PHTThreadPooledServer
  *
  *  Implements Pooled Server as in:
  *
@@ -17,14 +19,19 @@ import java.util.concurrent.Executors;
  *  NOTE: Nothing should be changed in this class.
  */
 
-public class PHTThreadPooledServer implements Runnable{
+public class PHTThreadPooledServer extends Thread {
 
-    protected int          serverPort   = 8080;
-    protected ServerSocket serverSocket = null;
-    protected boolean      isStopped    = false;
-    protected Thread       runningThread= null;
-    protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
-    private String         threadName;
+    protected int             serverPort    = 8000;
+    protected ServerSocket    serverSocket  = null;
+    protected boolean         isStopped     = false;
+    protected Thread          runningThread = null;
+    protected ExecutorService threadPool    = Executors.newFixedThreadPool(10);
+    protected SocketThread socket;
+    private String          threadName;
+
+    public PHTThreadPooledServer (String name){
+        this.threadName = name;
+    }
 
     public PHTThreadPooledServer (String name, int port){
         this.threadName = name;
@@ -32,12 +39,16 @@ public class PHTThreadPooledServer implements Runnable{
     }
 
     public void run(){
+        int i = 0;
+
         synchronized(this){
             this.runningThread = Thread.currentThread();
         }
+
         openServerSocket();
         System.out.println("Server Started.") ;
         while(! isStopped()){
+
             Socket clientSocket = null;
             try {
                 clientSocket = this.serverSocket.accept();
@@ -49,20 +60,33 @@ public class PHTThreadPooledServer implements Runnable{
                 throw new RuntimeException(
                         "Error accepting client connection", e);
             }
-            this.threadPool.execute(
-                    new WorkerRunnable(clientSocket,
-                            "Thread Pooled Server"));
+            System.out.println("WorkerRunnable" + i);
+            i++;
+
+            socket = new SocketThread(clientSocket, "DT-SCS socket");
+            socket.start();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
-        this.threadPool.shutdown();
         System.out.println("Server Stopped.") ;
     }
 
+    public void isRunning() {
+        if (PackageHandlingTruck.outputCommandSCS.equals("FINISHED")) {
+            socket.isRunningWR();
+        }
+    }
 
     private synchronized boolean isStopped() {
         return this.isStopped;
     }
 
-    public synchronized void stop(){
+    public void stopServerSocket(){
         this.isStopped = true;
         try {
             this.serverSocket.close();
@@ -75,7 +99,8 @@ public class PHTThreadPooledServer implements Runnable{
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
         } catch (IOException e) {
-            throw new RuntimeException("Cannot open port 8080", e);
+            throw new RuntimeException("Cannot open port 8000", e);
         }
     }
+
 }
