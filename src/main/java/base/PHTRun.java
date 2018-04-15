@@ -1,6 +1,6 @@
 package base;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
+//import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import lejos.robotics.SampleProvider;
 import ev3dev.sensors.BaseSensor;
 import lejos.hardware.port.Port;
@@ -68,6 +68,10 @@ class PHTRun extends Thread {
                     Thread.sleep(5);
                 }
 
+                if (!PackageHandlingTruck.isRunning) {
+                    break;
+                }
+
                 PackageHandlingTruck.liftMotor.setSpeed(50);
                 PackageHandlingTruck.liftMotor.rotateTo(-50, true);
 
@@ -104,6 +108,10 @@ class PHTRun extends Thread {
                     }
 
                     Thread.sleep(5);
+                }
+
+                if (!PackageHandlingTruck.isRunning) {
+                    break;
                 }
 
                 PackageHandlingTruck.liftMotor.setSpeed(50);
@@ -154,6 +162,10 @@ class PHTRun extends Thread {
                     Thread.sleep(5);
                 }
 
+                if (!PackageHandlingTruck.isRunning) {
+                    break;
+                }
+
                 PackageHandlingTruck.lineReader.setCurrentMode(2);
                 boolean deliveryStopFlag = false;
                 Thread.sleep(3000);
@@ -188,6 +200,10 @@ class PHTRun extends Thread {
 
                 }
 
+                if (!PackageHandlingTruck.isRunning) {
+                    break;
+                }
+
                 PackageHandlingTruck.liftMotor.setSpeed(50);
                 PackageHandlingTruck.liftMotor.rotateTo(-90, true);
 
@@ -210,6 +226,9 @@ class PHTRun extends Thread {
         } catch (InterruptedException e) {
             System.out.println("Thread " +  this.threadName + " interrupted.");
         }
+
+        PackageHandlingTruck.motorLeft.stop(true);
+        PackageHandlingTruck.motorRight.stop(true);
 
         return true;
     }
