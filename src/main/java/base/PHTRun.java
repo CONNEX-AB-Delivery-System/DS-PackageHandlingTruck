@@ -1,21 +1,15 @@
 package base;
 
-//import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import lejos.robotics.SampleProvider;
 import ev3dev.sensors.BaseSensor;
 import lejos.hardware.port.Port;
 import lejos.utility.Delay;
 //TODO: Do we need those imports?
 
-//import static base.DeliveryTruck.motorSteer;
-//import static base.DeliveryTruck.motorDrive;
-//TODO: Do we need those imports?
-
-
 /**
- *  Title: DTRun thread
+ *  Title: PHTRun thread
  *
- *  This is thread where all truck logic for task execution should be implemented.
+ *  This is the thread where all the truck logic for task execution should be implemented.
  *  Use function method to do that (it can be extended with other functions).
  */
 
@@ -23,7 +17,10 @@ class PHTRun extends Thread {
     private Thread t;
     private String threadName;
 
-
+    private static int HALF_SECOND = 500;
+    private static int ONE_SECOND = 1000;
+    private static int TWO_SECOND = 2000;
+    private static int THREE_SECOND = 3000;
 
     PHTRun ( String threadName) {
         this.threadName = threadName;
@@ -37,7 +34,7 @@ class PHTRun extends Thread {
 
                 PackageHandlingTruck.lineReader.setCurrentMode(2);
                 boolean stopFlag = false;
-                Thread.sleep(3000);
+                Thread.sleep(THREE_SECOND);
 
                 while (!stopFlag && PackageHandlingTruck.isRunning) {
 
@@ -46,22 +43,23 @@ class PHTRun extends Thread {
                     float[] sampleColor = new float[sampleSizeColor];
 
                     colorSample.fetchSample(sampleColor, 0);
-                    colorSample.fetchSample(sampleColor, 1);
-                    colorSample.fetchSample(sampleColor, 2);
+                    //TODO:Refine the codes after testing!
+                    //colorSample.fetchSample(sampleColor, 1);
+                    //colorSample.fetchSample(sampleColor, 2);
 
                     int colorSampleRed = (int)sampleColor[0];
                     int colorSampleGreen = (int)sampleColor[1];
                     int colorSampleBlue = (int)sampleColor[2];
 
                     int[] speed = LineFollower.motorsSpeed(colorSampleRed, colorSampleGreen, colorSampleBlue);
-                    PackageHandlingTruck.motorLeft.setSpeed(speed[0]);
-                    PackageHandlingTruck.motorRight.setSpeed(speed[1]);
-                    PackageHandlingTruck.motorLeft.backward();
-                    PackageHandlingTruck.motorRight.backward();
+                    PackageHandlingTruck.leftMotor.setSpeed(speed[0]);
+                    PackageHandlingTruck.rightMotor.setSpeed(speed[1]);
+                    PackageHandlingTruck.leftMotor.backward();
+                    PackageHandlingTruck.rightMotor.backward();
 
                     if (colorSampleRed > 125 && colorSampleBlue < 50 && colorSampleGreen < 50){
-                        PackageHandlingTruck.motorLeft.stop(true);
-                        PackageHandlingTruck.motorRight.stop(true);
+                        PackageHandlingTruck.leftMotor.stop(true);
+                        PackageHandlingTruck.rightMotor.stop(true);
                         stopFlag = true;
                     }
 
@@ -75,36 +73,36 @@ class PHTRun extends Thread {
                 PackageHandlingTruck.liftMotor.setSpeed(50);
                 PackageHandlingTruck.liftMotor.rotateTo(-50, true);
 
-                PackageHandlingTruck.obstacleDetection.setCurrentMode(2);
-                boolean obstacleFlag = false;
-                Thread.sleep(3000);
+                PackageHandlingTruck.palletDetector.setCurrentMode(2);
+                boolean palletFlag = false;
+                Thread.sleep(THREE_SECOND);
 
-                while (!obstacleFlag && PackageHandlingTruck.isRunning) {
+                while (!palletFlag && PackageHandlingTruck.isRunning) {
 
-                    SampleProvider obstacleSample = PackageHandlingTruck.obstacleDetection.getRGBMode();
-                    int obstacleSampleSize = obstacleSample.sampleSize();
-                    float[] obstacleSampleColor = new float[obstacleSampleSize];
+                    SampleProvider palletSample = PackageHandlingTruck.palletDetector.getRGBMode();
+                    int palletSampleSize = palletSample.sampleSize();
+                    float[] palletSampleColor = new float[palletSampleSize];
                     Thread.sleep(500);
-                    obstacleSample.fetchSample(obstacleSampleColor, 0);
-                    obstacleSample.fetchSample(obstacleSampleColor, 1);
-                    obstacleSample.fetchSample(obstacleSampleColor, 2);
+                    palletSample.fetchSample(palletSampleColor, 0);
+                    palletSample.fetchSample(palletSampleColor, 1);
+                    palletSample.fetchSample(palletSampleColor, 2);
 
-                    int obstacleColorSampleRed = (int) obstacleSampleColor[0];
-                    int obstacleColorSampleGreen = (int) obstacleSampleColor[1];
-                    int obstacleColorSampleBlue = (int) obstacleSampleColor[2];
+                    int palletColorSampleRed = (int) palletSampleColor[0];
+                    int palletColorSampleGreen = (int) palletSampleColor[1];
+                    int palletColorSampleBlue = (int) palletSampleColor[2];
 
-                    float average = (obstacleColorSampleRed + obstacleColorSampleGreen + obstacleColorSampleBlue) / 3;
+                    float average = (palletColorSampleRed + palletColorSampleGreen + palletColorSampleBlue) / 3;
 
                     if (average < 25) {
-                        PackageHandlingTruck.motorLeft.setSpeed(150);
-                        PackageHandlingTruck.motorRight.setSpeed(150);
-                        PackageHandlingTruck.motorLeft.backward();
-                        PackageHandlingTruck.motorRight.backward();
+                        PackageHandlingTruck.leftMotor.setSpeed(150);
+                        PackageHandlingTruck.rightMotor.setSpeed(150);
+                        PackageHandlingTruck.leftMotor.backward();
+                        PackageHandlingTruck.rightMotor.backward();
                     }
                     else{
-                        PackageHandlingTruck.motorLeft.stop(true);
-                        PackageHandlingTruck.motorRight.stop(true);
-                        obstacleFlag = true;
+                        PackageHandlingTruck.leftMotor.stop(true);
+                        PackageHandlingTruck.rightMotor.stop(true);
+                        palletFlag = true;
                     }
 
                     Thread.sleep(5);
@@ -117,15 +115,15 @@ class PHTRun extends Thread {
                 PackageHandlingTruck.liftMotor.setSpeed(50);
                 PackageHandlingTruck.liftMotor.rotateTo(70, true);
 
-                Thread.sleep(3000);
+                Thread.sleep(THREE_SECOND);
 
-                PackageHandlingTruck.motorLeft.setSpeed(200);
-                PackageHandlingTruck.motorRight.setSpeed(200);
-                PackageHandlingTruck.motorLeft.forward();
-                PackageHandlingTruck.motorRight.forward();
-                Thread.sleep(2000);
-                PackageHandlingTruck.motorLeft.stop(true);
-                PackageHandlingTruck.motorRight.stop(true);
+                PackageHandlingTruck.leftMotor.setSpeed(200);
+                PackageHandlingTruck.rightMotor.setSpeed(200);
+                PackageHandlingTruck.leftMotor.forward();
+                PackageHandlingTruck.rightMotor.forward();
+                Thread.sleep(TWO_SECOND);
+                PackageHandlingTruck.leftMotor.stop(true);
+                PackageHandlingTruck.rightMotor.stop(true);
 
                 PackageHandlingTruck.lineReader.setCurrentMode(2);
                 boolean turnFlag = false;
@@ -148,15 +146,15 @@ class PHTRun extends Thread {
                     float turnAverage = (turnColorSampleRed + turnColorSampleGreen + turnColorSampleBlue) / 3;
 
                     if ((int)turnAverage < 80){
-                        PackageHandlingTruck.motorLeft.stop(true);
-                        PackageHandlingTruck.motorRight.stop(true);
+                        PackageHandlingTruck.leftMotor.stop(true);
+                        PackageHandlingTruck.rightMotor.stop(true);
                         turnFlag = true;
                     }
                     else {
-                        PackageHandlingTruck.motorLeft.setSpeed(150);
-                        PackageHandlingTruck.motorRight.setSpeed(150);
-                        PackageHandlingTruck.motorLeft.forward();
-                        PackageHandlingTruck.motorRight.backward();
+                        PackageHandlingTruck.leftMotor.setSpeed(150);
+                        PackageHandlingTruck.rightMotor.setSpeed(150);
+                        PackageHandlingTruck.leftMotor.forward();
+                        PackageHandlingTruck.rightMotor.backward();
                     }
 
                     Thread.sleep(5);
@@ -168,7 +166,7 @@ class PHTRun extends Thread {
 
                 PackageHandlingTruck.lineReader.setCurrentMode(2);
                 boolean deliveryStopFlag = false;
-                Thread.sleep(3000);
+                Thread.sleep(THREE_SECOND);
 
                 while (!deliveryStopFlag && PackageHandlingTruck.isRunning) {
 
@@ -185,14 +183,14 @@ class PHTRun extends Thread {
                     int deliveryColorSampleBlue = (int)deliverySampleColor[2];
 
                     int[] speed = LineFollower.motorsSpeed(deliveryColorSampleRed, deliveryColorSampleGreen, deliveryColorSampleBlue);
-                    PackageHandlingTruck.motorLeft.setSpeed(speed[0]);
-                    PackageHandlingTruck.motorRight.setSpeed(speed[1]);
-                    PackageHandlingTruck.motorLeft.backward();
-                    PackageHandlingTruck.motorRight.backward();
+                    PackageHandlingTruck.leftMotor.setSpeed(speed[0]);
+                    PackageHandlingTruck.rightMotor.setSpeed(speed[1]);
+                    PackageHandlingTruck.leftMotor.backward();
+                    PackageHandlingTruck.rightMotor.backward();
 
                     if (deliveryColorSampleRed < 30 && deliveryColorSampleBlue < 50 && deliveryColorSampleGreen > 70){
-                        PackageHandlingTruck.motorLeft.stop(true);
-                        PackageHandlingTruck.motorRight.stop(true);
+                        PackageHandlingTruck.leftMotor.stop(true);
+                        PackageHandlingTruck.rightMotor.stop(true);
                         deliveryStopFlag = true;
                     }
 
@@ -207,19 +205,19 @@ class PHTRun extends Thread {
                 PackageHandlingTruck.liftMotor.setSpeed(50);
                 PackageHandlingTruck.liftMotor.rotateTo(-90, true);
 
-                Thread.sleep(1000);
+                Thread.sleep(ONE_SECOND);
 
-                PackageHandlingTruck.motorLeft.setSpeed(200);
-                PackageHandlingTruck.motorRight.setSpeed(200);
-                PackageHandlingTruck.motorLeft.forward();
-                PackageHandlingTruck.motorRight.forward();
-                Thread.sleep(3000);
-                PackageHandlingTruck.motorLeft.stop(true);
-                PackageHandlingTruck.motorRight.stop(true);
+                PackageHandlingTruck.leftMotor.setSpeed(200);
+                PackageHandlingTruck.rightMotor.setSpeed(200);
+                PackageHandlingTruck.leftMotor.forward();
+                PackageHandlingTruck.rightMotor.forward();
+                Thread.sleep(THREE_SECOND);
+                PackageHandlingTruck.leftMotor.stop(true);
+                PackageHandlingTruck.rightMotor.stop(true);
 
                 PackageHandlingTruck.runThreadIsExecuted = true;
-                PackageHandlingTruck.outputCommandSCS = "FINISHED";
-                System.out.println("Task Executed");
+                PackageHandlingTruck.outputCommandSCS = "FINISHED.";
+                System.out.println("Task Executed.");
 
             }
 
@@ -227,8 +225,8 @@ class PHTRun extends Thread {
             System.out.println("Thread " +  this.threadName + " interrupted.");
         }
 
-        PackageHandlingTruck.motorLeft.stop(true);
-        PackageHandlingTruck.motorRight.stop(true);
+        PackageHandlingTruck.leftMotor.stop(true);
+        PackageHandlingTruck.rightMotor.stop(true);
 
         return true;
     }

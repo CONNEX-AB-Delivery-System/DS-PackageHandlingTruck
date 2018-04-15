@@ -11,7 +11,7 @@ import java.net.Socket;
  *  NOTE: Nothing should be changed in this class.
  */
 
-public class WorkerRunnable implements Runnable{
+public class WorkerRunnable implements Runnable {
 
     protected Socket clientSocket = null;
     protected String serverText   = null;

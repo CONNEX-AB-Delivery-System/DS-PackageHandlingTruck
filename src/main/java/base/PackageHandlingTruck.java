@@ -10,32 +10,41 @@ import lejos.hardware.port.SensorPort;
 /**
  * Title: PackageHandlingTruck
  *
+ * The main class for the Package Handling Truck. All the initialization for motors and sensors will happen here.
+ * Also starts serverSocket thread and respective Socket connections from SCS.
+ * After command "run" from SCS starts DTRun thread execution.
  *
+ * NOTE: Nothing should be changed in this class.
  */
-
 
 
 public class PackageHandlingTruck {
 
     //Configuration
     private static int HALF_SECOND = 500;
+    private static int ONE_SECOND = 1000;
+    private static int TWO_SECOND = 2000;
+    private static int THREE_SECOND = 3000;
 
     //TODO: synhronize isRunning variable between threads
     //Synchronization variables between threads to allow intra thread communication
     //Main variable for stopping execution
+
     static boolean isRunning = true;
     //Variables for commands from/to SCS
+
     static String inputCommandSCS = "";
     static String outputCommandSCS = "none";
+
     //Variables for controlling task thread
     static boolean runThreadIsStarted = false;
     static boolean runThreadIsExecuted = false;
 
-    public static EV3LargeRegulatedMotor motorLeft;
-    public static EV3LargeRegulatedMotor motorRight;
+    public static EV3LargeRegulatedMotor leftMotor;
+    public static EV3LargeRegulatedMotor rightMotor;
     public static EV3MediumRegulatedMotor liftMotor;
 
-    public static EV3ColorSensor obstacleDetection;
+    public static EV3ColorSensor palletDetector;
     public static EV3ColorSensor lineReader;
 
 
@@ -49,20 +58,20 @@ public class PackageHandlingTruck {
         System.out.println("Battery Voltage: " + Battery.getInstance().getVoltage());
         System.out.println("Battery Current: " + Battery.getInstance().getBatteryCurrent());
         if (Battery.getInstance().getVoltage() < minVoltage) {
-            System.out.println("Battery voltage to low, shutdown");
+            System.out.println("Battery voltage to low. Shutdown down and change the batteries.");
             System.exit(0);
         }
 
         //initalize all motors here
-        motorLeft = new EV3LargeRegulatedMotor(MotorPort.B);
-        motorRight = new EV3LargeRegulatedMotor(MotorPort.C);
+        leftMotor = new EV3LargeRegulatedMotor(MotorPort.B);
+        rightMotor = new EV3LargeRegulatedMotor(MotorPort.C);
         liftMotor = new EV3MediumRegulatedMotor(MotorPort.A);
-        System.out.println("Motors initialized");
+        System.out.println("Motors initialized.");
 
-        //initalize all sensors here
-        obstacleDetection = new EV3ColorSensor(SensorPort.S2);
+        //initialize all sensors here
+        palletDetector = new EV3ColorSensor(SensorPort.S2);
         lineReader = new EV3ColorSensor(SensorPort.S1);
-        System.out.println("Sensors initialized");
+        System.out.println("Sensors initialized.");
 
         //open thread for socket server to listen/send commands to SCS
         PHTThreadPooledServer server = new PHTThreadPooledServer("ServerThread-1", 8000);

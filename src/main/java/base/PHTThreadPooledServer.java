@@ -24,7 +24,7 @@ public class PHTThreadPooledServer implements Runnable{
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
     protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
-    private String          threadName;
+    private String         threadName;
 
     public PHTThreadPooledServer (String name, int port){
         this.threadName = name;
