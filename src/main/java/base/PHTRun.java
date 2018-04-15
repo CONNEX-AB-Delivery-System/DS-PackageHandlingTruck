@@ -53,7 +53,7 @@ class PHTRun extends Thread {
                     int colorSampleGreen = (int)sampleColor[1];
                     int colorSampleBlue = (int)sampleColor[2];
 
-                    int[] speed = base.LineFollower.motorsSpeed(colorSampleRed, colorSampleGreen, colorSampleBlue);
+                    int[] speed = LineFollower.LineFollower.motorsSpeed(colorSampleRed, colorSampleGreen, colorSampleBlue);
                     PackageHandlingTruck.leftMotor.setSpeed(speed[0]);
                     PackageHandlingTruck.rightMotor.setSpeed(speed[1]);
                     PackageHandlingTruck.leftMotor.backward();
@@ -184,7 +184,7 @@ class PHTRun extends Thread {
                     int deliveryColorSampleGreen = (int)deliverySampleColor[1];
                     int deliveryColorSampleBlue = (int)deliverySampleColor[2];
 
-                    int[] speed = base.LineFollower.motorsSpeed(deliveryColorSampleRed, deliveryColorSampleGreen, deliveryColorSampleBlue);
+                    int[] speed = LineFollower.LineFollower.motorsSpeed(deliveryColorSampleRed, deliveryColorSampleGreen, deliveryColorSampleBlue);
                     PackageHandlingTruck.leftMotor.setSpeed(speed[0]);
                     PackageHandlingTruck.rightMotor.setSpeed(speed[1]);
                     PackageHandlingTruck.leftMotor.backward();

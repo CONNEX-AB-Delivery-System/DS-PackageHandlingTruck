@@ -1,4 +1,4 @@
-package base;
+package LineFollower;
 
 public class LineFollower {
 
