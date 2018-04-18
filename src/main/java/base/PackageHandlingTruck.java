@@ -85,19 +85,20 @@ public class PackageHandlingTruck {
         runThreadIsStarted = true;
         runThread.start();
 
-        //wait for some time till run thread is executed
-        if (!runThreadIsExecuted) {
-            try {
-                Thread.sleep(10 * 100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        while (isRunning) {
+            //wait for some time till run thread is executed
+            if (!runThreadIsExecuted) {
+                try {
+                    Thread.sleep(10 * 100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                inputCommandSCS = "";
+                runThreadIsStarted = false;
+                isRunning = false;
             }
-        } else {
-            inputCommandSCS = "";
-            runThreadIsStarted = false;
-            isRunning = false;
         }
-
 
         System.exit(0);
 
