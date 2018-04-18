@@ -21,7 +21,7 @@ The project includes latest dependencies and an example ready to be deployed on 
 
 Steps to connect to Truck: 
 1) switch on Truck and wait for OS to load
-2) Check the IP of Truck (by default for this truck it should be 192.168.122.94 - if not, update the file `deploy.gradle`):
+2) Check the IP of Truck (by default for this truck it should be 192.168.122.94 - if not, update the file `config.gradle`):
 3) Connect your computer 
 
 ```
