@@ -47,6 +47,17 @@ remotes {
 - remoteRun (Execute a jar deployed on your Brick)
 - deployAndRun (Deploy & Execute from your Computer the program that you configured on the file: MANIFEST.MF)
 
+
+# About Forklift truck
+
+motors 
+- [two EV3 Large Motors] for run to driving and steering on tracked wheel system. Documentation here: <a href="http://ev3dev-lang-java.github.io/docs/api/latest/ev3dev-lang-java/ev3dev/actuators/lego/motors/EV3LargeRegulatedMotor.html">Javadocs</a>
+- [one EV3 Medium motor] for controlling the lift arm to lifting pallet. Documentation here: <a href="http://ev3dev-lang-java.github.io/docs/api/latest/ev3dev-lang-java/ev3dev/actuators/lego/motors/EV3MediumRegulatedMotor.html">Javadocs</a>
+
+sensors
+- [one EV3 Color Sensor] for measuring line colors to follow the line. Documentation here: <a href="http://ev3dev-lang-java.github.io/docs/api/latest/ev3dev-lang-java/ev3dev/sensors/ev3/EV3ColorSensor.html">Javadocs</a> and <a href="http://docs.ev3dev.org/projects/lego-linux-drivers/en/ev3dev-jessie/sensor_data.html#lego-ev3-color">Sensor capabilities</a>
+- [one EV3 Color Sensor] for measuring pallet colors and distance in front to detect pallets and distance. Documentation here: <a href="http://ev3dev-lang-java.github.io/docs/api/latest/ev3dev-lang-java/ev3dev/sensors/ev3/EV3ColorSensor.html">Javadocs</a> and <a href="http://docs.ev3dev.org/projects/lego-linux-drivers/en/ev3dev-jessie/sensor_data.html#lego-ev3-color">Sensor capabilities</a>
+
 # Documenatation of system
 
 ## General information
@@ -57,9 +68,15 @@ And is programmed in JAVA: http://ev3dev-lang-java.github.io/#/. JAVA programms 
 to see how it is done, follow this link: http://ev3dev-lang-java.github.io/docs/support/getting_started/create-your-first-project.html.
 (also Git repo for example source code available here: https://github.com/ev3dev-lang-java/template_project_gradle).
 
-## Modify the example
+## Examples
 
-In order to modify the example, current full APIs are:
+Exist several examples ready to use here:
+
+https://github.com/ev3dev-lang-java/examples
+
+Another Git repo for example source code available here: https://github.com/ev3dev-lang-java/template_project_gradle).
+
+In order to modify examples, current full APIs are:
 
 http://ev3dev-lang-java.github.io/docs/api/latest/index.html
 
@@ -70,12 +87,6 @@ And classes: EV3ColorSensor, EV3IRSensor, EV3TouchSensor, EV3UltrasonicSensor <b
 
 You mostly will use EV3 Motors in package: ev3dev.actuators.lego.motors <br />
 And classes: EV3LargeRegulatedMotor, EV3MediumRegulatedMotor
-
-## Examples
-
-Exist several examples ready to use here:
-
-https://github.com/ev3dev-lang-java/examples
 
 ## Sensors and Motors
 
