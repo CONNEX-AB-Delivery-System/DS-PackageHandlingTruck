@@ -35,6 +35,7 @@ class PHTRun extends Thread {
             while (PackageHandlingTruck.isRunning && !PackageHandlingTruck.runThreadIsExecuted) {
 
                 //Your code here
+                int[] speed = LineFollower.LineFollower.motorsSpeed(1,1,1);
 
                 PackageHandlingTruck.runThreadIsExecuted = true;
                 PackageHandlingTruck.outputCommandSCS = "FINISHED";
