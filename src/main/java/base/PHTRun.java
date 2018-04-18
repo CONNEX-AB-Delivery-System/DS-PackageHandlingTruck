@@ -34,7 +34,11 @@ class PHTRun extends Thread {
         try {
             while (PackageHandlingTruck.isRunning && !PackageHandlingTruck.runThreadIsExecuted) {
 
-                //Your code here
+                //TODO: YOUR CODE HERE
+                //TODO: CHECK THIS DOCUMENTATION TO UNDERSTAND HOW TO RUN THIS TRUCK
+                //TODO: AND HOW TO WRITE CODE:
+                //https://github.com/CONNEX-AB-Delivery-System/DS-DeliveryTruck/blob/master/README.md
+                
                 //int[] speed = LineFollower.LineFollower.motorsSpeed(1,1,1);
 
                 PackageHandlingTruck.liftMotor.setSpeed(200);

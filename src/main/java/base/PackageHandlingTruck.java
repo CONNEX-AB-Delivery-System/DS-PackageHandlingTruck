@@ -85,6 +85,22 @@ public class PackageHandlingTruck {
         runThreadIsStarted = true;
         runThread.start();
 
+        //wait for some time till run thread is executed
+        if (!runThreadIsExecuted) {
+            try {
+                Thread.sleep(10 * 100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            inputCommandSCS = "";
+            runThreadIsStarted = false;
+            isRunning = false;
+        }
+
+
+        System.exit(0);
+
         /*
         while (isRunning) {
             //first, check if have received "kill" command from SCS
@@ -135,21 +151,7 @@ public class PackageHandlingTruck {
 
         */
 
-        //wait for some time till run thread is executed
-        if (!runThreadIsExecuted) {
-            try {
-                Thread.sleep(10 * 100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            inputCommandSCS = "";
-            runThreadIsStarted = false;
-            isRunning = false;
-        }
-
-
-        System.exit(0);
+        //System.exit(0);
 
 
         //TODO:To Stop the motor in case of pkill java for example
