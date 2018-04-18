@@ -1,6 +1,5 @@
 package base;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.Lister;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3ColorSensor;
@@ -76,9 +75,17 @@ public class PackageHandlingTruck {
         System.out.println("Sensors initialized.");
 
         //open thread for socket server to listen/send commands to SCS
-        PHTThreadPooledServer server = new PHTThreadPooledServer("ServerThread-1", 8000);
-        server.start();
+        //PHTThreadPooledServer server = new PHTThreadPooledServer("ServerThread-1", 8000);
+        //server.start();
 
+        //open thread for executing "run" task
+        runThread = new PHTRun( "RunThread-1");
+        //add "run" task and "run executed" flags
+        runThreadIsExecuted = false;
+        runThreadIsStarted = true;
+        runThread.start();
+
+        /*
         while (isRunning) {
             //first, check if have received "kill" command from SCS
             if (inputCommandSCS.equals("KILL")) {
@@ -125,6 +132,22 @@ public class PackageHandlingTruck {
 
         System.out.println("Stopping Server");
         server.stopServerSocket();
+
+        */
+
+        //wait for some time till run thread is executed
+        if (!runThreadIsExecuted) {
+            try {
+                Thread.sleep(10 * 100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            inputCommandSCS = "";
+            runThreadIsStarted = false;
+            isRunning = false;
+        }
+
 
         System.exit(0);
 
