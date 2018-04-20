@@ -38,20 +38,24 @@ class PHTRun extends Thread {
                 //TODO: CHECK THIS DOCUMENTATION TO UNDERSTAND HOW TO RUN THIS TRUCK
                 //TODO: AND HOW TO WRITE CODE:
                 //https://github.com/CONNEX-AB-Delivery-System/DS-DeliveryTruck/blob/master/README.md
-                
+
                 //int[] speed = LineFollower.LineFollower.motorsSpeed(1,1,1);
 
                 PackageHandlingTruck.liftMotor.setSpeed(200);
-                PackageHandlingTruck.liftMotor.rotateTo(20, true);
+                PackageHandlingTruck.liftMotor.rotateTo(50, true);
 
-                Thread.sleep(500);
+                Thread.sleep(2000);
 
                 PackageHandlingTruck.liftMotor.setSpeed(200);
-                PackageHandlingTruck.liftMotor.rotateTo(-20, true);
+                PackageHandlingTruck.liftMotor.rotateTo(-50, true);
+
+                Thread.sleep(3000);
+
+
 
                 PackageHandlingTruck.runThreadIsExecuted = true;
-                PackageHandlingTruck.outputCommandSCS = "FINISHED";
-                System.out.println("Task Executed");
+                PackageHandlingTruck.outputCommandSCS = "FINISHED.";
+                System.out.println("Task Executed.");
 
             }
 
