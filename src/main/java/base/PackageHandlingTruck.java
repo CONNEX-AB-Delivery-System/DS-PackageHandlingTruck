@@ -102,7 +102,6 @@ public class PackageHandlingTruck {
             }
         }
 
-        System.out.println("test");
 
         System.exit(0);
 

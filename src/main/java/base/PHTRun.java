@@ -39,8 +39,6 @@ class PHTRun extends Thread {
                 //TODO: AND HOW TO WRITE CODE:
                 //https://github.com/CONNEX-AB-Delivery-System/DS-DeliveryTruck/blob/master/README.md
 
-                //int[] speed = LineFollower.LineFollower.motorsSpeed(1,1,1);
-
                 PackageHandlingTruck.liftMotor.setSpeed(200);
                 PackageHandlingTruck.liftMotor.rotateTo(50, true);
 
@@ -50,7 +48,6 @@ class PHTRun extends Thread {
                 PackageHandlingTruck.liftMotor.rotateTo(-50, true);
 
                 Thread.sleep(3000);
-
 
 
                 PackageHandlingTruck.runThreadIsExecuted = true;
