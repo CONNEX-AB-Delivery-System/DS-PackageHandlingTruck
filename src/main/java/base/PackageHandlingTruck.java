@@ -88,7 +88,7 @@ public class PackageHandlingTruck {
         //wait for some time till run thread is executed
         while (!runThreadIsExecuted)
         {
-            System.out.println("thread exe" + runThreadIsExecuted);
+            //System.out.println("thread exe" + runThreadIsExecuted);
             try {
                 Thread.sleep(10 * 100);
             } catch (InterruptedException e) {
@@ -96,9 +96,9 @@ public class PackageHandlingTruck {
             }
 
             if (runThreadIsExecuted) {
-                    inputCommandSCS = "";
-                    runThreadIsStarted = false;
-                    isRunning = false;
+                inputCommandSCS = "";
+                runThreadIsStarted = false;
+                isRunning = false;
             }
         }
 
@@ -106,54 +106,45 @@ public class PackageHandlingTruck {
         System.exit(0);
 
         /*
-        while (isRunning) {
-            //first, check if have received "kill" command from SCS
-            if (inputCommandSCS.equals("KILL")) {
-                //then stop everything
-                //isRunning = false;
-            }
-
-            //check if have received "run" command from SCS and have not executed run thread before
-            if (inputCommandSCS.equals("RUN") && (!runThreadIsStarted)) {
-                //open thread for executing "run" task
-                runThread = new PHTRun( "RunThread-1");
-                //add "run" task and "run executed" flags
-                runThreadIsExecuted = false;
-                runThreadIsStarted = true;
-                runThread.start();
-            }
-
-            //wait for some time till run thread is executed
-            if (!runThreadIsExecuted) {
-                try {
-                    Thread.sleep(10 * 100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                inputCommandSCS = "";
-                runThreadIsStarted = false;
-            }
-
-            if (PackageHandlingTruck.outputCommandSCS.equals("FINISHED")) {
-
-                System.out.println("main-FINISHED");
-                server.isRunning();
-
-            }
-
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        System.out.println("Stopping Server");
-        server.stopServerSocket();
-
-        */
+         while (isRunning) {
+         //first, check if have received "kill" command from SCS
+         if (inputCommandSCS.equals("KILL")) {
+         //then stop everything
+         //isRunning = false;
+         }
+         //check if have received "run" command from SCS and have not executed run thread before
+         if (inputCommandSCS.equals("RUN") && (!runThreadIsStarted)) {
+         //open thread for executing "run" task
+         runThread = new PHTRun( "RunThread-1");
+         //add "run" task and "run executed" flags
+         runThreadIsExecuted = false;
+         runThreadIsStarted = true;
+         runThread.start();
+         }
+         //wait for some time till run thread is executed
+         if (!runThreadIsExecuted) {
+         try {
+         Thread.sleep(10 * 100);
+         } catch (InterruptedException e) {
+         e.printStackTrace();
+         }
+         } else {
+         inputCommandSCS = "";
+         runThreadIsStarted = false;
+         }
+         if (PackageHandlingTruck.outputCommandSCS.equals("FINISHED")) {
+         System.out.println("main-FINISHED");
+         server.isRunning();
+         }
+         try {
+         Thread.sleep(100);
+         } catch (InterruptedException e) {
+         e.printStackTrace();
+         }
+         }
+         System.out.println("Stopping Server");
+         server.stopServerSocket();
+         */
 
         //System.exit(0);
 
